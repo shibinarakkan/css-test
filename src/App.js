@@ -5,6 +5,9 @@ import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import moment from 'moment';
 
+const default_markers = [
+];
+
 function loadJS(src) {
   var ref = window.document.getElementsByTagName("script")[0];
   var script = window.document.createElement("script");
@@ -189,6 +192,10 @@ class App extends Component {
       this.setState({mapReady: true});
       this.mapcallbacks.forEach(c => c(map));
       this.mapcallbacks.length = 0;
+      default_markers.forEach(f => new window.google.maps.Marker({
+        position: {lat: f[0], lng: f[1]},
+        map,
+      }));
     };
     this.login(() => {
       this.getMyGeofences();
