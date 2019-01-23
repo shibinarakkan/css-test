@@ -3,6 +3,7 @@ import './App.css';
 import crosshair from './assets/selector-square-border.png';
 import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import moment from 'moment';
 
 function loadJS(src) {
   var ref = window.document.getElementsByTagName("script")[0];
@@ -25,8 +26,9 @@ function drawGeofences(map, geofences) {
   for(let i in geofences) {
     let geofence = geofences[i];
     let info = JSON.parse(geofence.info);
+    var polygon = null;
     if(info.structure === 'polygon') {
-      var polygon = new window.google.maps.Polygon({
+      polygon = new window.google.maps.Polygon({
         paths: info.coords,
         strokeColor: '#FF0000',
         strokeOpacity: 0.8,
@@ -34,6 +36,9 @@ function drawGeofences(map, geofences) {
         fillColor: '#FF0000',
         fillOpacity: 0.35,
         map,
+      });
+      polygon.addListener('click', () => {
+        setMessage(geofence.geofenceid + ' : ' + geofence.geofencename);
       });
       geofenceMap[geofence.geofenceid] = polygon;
     } else if(info.structure === 'circle') {
@@ -45,10 +50,10 @@ function drawGeofences(map, geofences) {
         fillOpacity: 0.35,
         map: map,
         center: info.center,
-        radius: info.radius
+        radius: info.radius,
       });
       if(info.coords) {
-        var polygon = new window.google.maps.Polygon({
+        polygon = new window.google.maps.Polygon({
           paths: info.coords,
           strokeColor: '#00FF00',
           strokeOpacity: 0.8,
@@ -56,6 +61,9 @@ function drawGeofences(map, geofences) {
           fillColor: '#00FF00',
           fillOpacity: 0.35,
           map,
+        });
+        polygon.addListener('click', () => {
+          setMessage(geofence.geofenceid + ' : ' + geofence.geofencename + ', false:circle');
         });
       }
       circle.addListener('click', () => {
@@ -130,6 +138,24 @@ function setMessage(msg) {
   setTimeout(() => p.removeChild(el), 3000);
 }
 
+function drawZeroPolygon() {
+  let polygon = new window.google.maps.Polygon({
+    map: window.map,
+    paths: [
+      {lat: 1.0, lng: -1.0},
+      {lat: 1.0, lng: 1.0},
+      {lat: -1.0, lng: 1.0},
+      {lat: -1.0, lng: -1.0},
+    ],
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+  })
+  polygon.addListener('click', () => setMessage('Nothing should come in here'));
+}
+
 const url = 'https://apiplatform.intellicar.in';
 
 const geofenceMap = {}
@@ -155,6 +181,8 @@ class App extends Component {
           center,
           zoom: 13,
       });
+      window.map = map;
+      drawZeroPolygon();
       center_changed();
       map.addListener('center_changed', center_changed);
       this.map = map;
@@ -202,11 +230,13 @@ class App extends Component {
   }
   getVehiclePath = (vehicle, cb) => {
     let token = localStorage.getItem('token');
-    let now = new Date().valueOf();
+    let now = moment().startOf('day').hour(8).valueOf();
     axios.post(url + '/api/reports/rtgps/trackhistory', {
       token, vehicleid: vehicle.vehicleid, starttime: now - 86400000, endtime: now
     }).then(rsp => {
-      let path = rsp.data.data;
+      console.log('bad coordinates', vehicle.vehicleno, rsp.data.data.filter(g => g.latitude > -1 && g.latitude < 1 && g.longitude > -1 && g.longitude < 1));
+      let path = rsp.data.data.filter(g => g.latitude != 0 && g.longitude != 0 && !(g.latitude < 1 && g.latitude > -1) && !(g.longitude < 1 && g.longitude > -1));
+      if(path.length === 0) setMessage('no rtgps path');
       cb(path);
     });
   }
