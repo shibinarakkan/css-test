@@ -33,10 +33,10 @@ function drawGeofences(map, geofences) {
     if(info.structure === 'polygon') {
       polygon = new window.google.maps.Polygon({
         paths: info.coords,
-        strokeColor: '#FF0000',
+        strokeColor: '#fd5252', // red
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: '#FF0000',
+        fillColor: '#fd5252', // red
         fillOpacity: 0.35,
         map,
       });
@@ -46,10 +46,10 @@ function drawGeofences(map, geofences) {
       geofenceMap[geofence.geofenceid] = polygon;
     } else if(info.structure === 'circle') {
       var circle = new window.google.maps.Circle({
-        strokeColor: '#0000FF',
+        strokeColor: '#54abf3', // blue
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: '#0000FF',
+        fillColor: '#54abf3', // blue
         fillOpacity: 0.35,
         map: map,
         center: info.center,
@@ -58,10 +58,10 @@ function drawGeofences(map, geofences) {
       if(info.coords) {
         polygon = new window.google.maps.Polygon({
           paths: info.coords,
-          strokeColor: '#00FF00',
+          strokeColor: '#37e237', // green
           strokeOpacity: 0.8,
           strokeWeight: 2,
-          fillColor: '#00FF00',
+          fillColor: '#37e237', // green
           fillOpacity: 0.35,
           map,
         });
@@ -98,7 +98,7 @@ function _drawPolyLine(map, path, bounds) {
   let polyline = new window.google.maps.Polyline({
     path: _path,
     geodesic: true,
-    strokeColor: '#000000',
+    strokeColor: '#e5c163',
     strokeOpacity: 1.0,
     strokeWeight: 2,
     icons,
@@ -183,6 +183,268 @@ class App extends Component {
       let map = new window.google.maps.Map(document.querySelector('.maph'), {
           center,
           zoom: 13,
+          styles: [  {
+            "featureType": "all",
+            "elementType": "labels",
+            "stylers": [
+                {
+                    "visibility": "on"
+                }
+            ]
+        },
+        {
+            "featureType": "all",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "saturation": 36
+                },
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 40
+                }
+            ]
+        },
+        {
+            "featureType": "all",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "visibility": "on"
+                },
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 16
+                }
+            ]
+        },
+        {
+            "featureType": "all",
+            "elementType": "labels.icon",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "administrative",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 20
+                }
+            ]
+        },
+        {
+            "featureType": "administrative",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 17
+                },
+                {
+                    "weight": 1.2
+                }
+            ]
+        },
+        // {
+        //     "featureType": "administrative.country",
+        //     "elementType": "labels.text.fill",
+        //     "stylers": [
+        //         {
+        //             "color": "#e5c163"
+        //         }
+        //     ]
+        // },
+        {
+            "featureType": "administrative.locality",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#c4c4c4"
+                }
+            ]
+        },
+        // {
+        //     "featureType": "administrative.neighborhood",
+        //     "elementType": "labels.text.fill",
+        //     "stylers": [
+        //         {
+        //             "color": "#e5c163"
+        //         }
+        //     ]
+        // },
+        {
+            "featureType": "landscape",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 20
+                }
+            ]
+        },
+        {
+            "featureType": "poi",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 21
+                },
+                {
+                    "visibility": "on"
+                }
+            ]
+        },
+        {
+            "featureType": "poi.business",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "visibility": "on"
+                }
+            ]
+        },
+        // {
+        //     "featureType": "road.highway",
+        //     "elementType": "geometry.fill",
+        //     "stylers": [
+        //         {
+        //             "color": "#e5c163"
+        //         },
+        //         {
+        //             "lightness": "0"
+        //         }
+        //     ]
+        // },
+        {
+            "featureType": "road.highway",
+            "elementType": "geometry.stroke",
+            "stylers": [
+                {
+                    "visibility": "off"
+                }
+            ]
+        },
+        {
+            "featureType": "road.highway",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#ffffff"
+                }
+            ]
+        },
+        // {
+        //     "featureType": "road.highway",
+        //     "elementType": "labels.text.stroke",
+        //     "stylers": [
+        //         {
+        //             "color": "#e5c163"
+        //         }
+        //     ]
+        // },
+        {
+            "featureType": "road.arterial",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 18
+                }
+            ]
+        },
+        {
+            "featureType": "road.arterial",
+            "elementType": "geometry.fill",
+            "stylers": [
+                {
+                    "color": "#575757"
+                }
+            ]
+        },
+        {
+            "featureType": "road.arterial",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#ffffff"
+                }
+            ]
+        },
+        {
+            "featureType": "road.arterial",
+            "elementType": "labels.text.stroke",
+            "stylers": [
+                {
+                    "color": "#2c2c2c"
+                }
+            ]
+        },
+        {
+            "featureType": "road.local",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 16
+                }
+            ]
+        },
+        {
+            "featureType": "road.local",
+            "elementType": "labels.text.fill",
+            "stylers": [
+                {
+                    "color": "#999999"
+                }
+            ]
+        },
+        {
+            "featureType": "transit",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 19
+                }
+            ]
+        },
+        {
+            "featureType": "water",
+            "elementType": "geometry",
+            "stylers": [
+                {
+                    "color": "#000000"
+                },
+                {
+                    "lightness": 17
+                }
+            ]
+        }
+          ]
       });
       window.map = map;
       drawZeroPolygon();
@@ -192,10 +454,15 @@ class App extends Component {
       this.setState({mapReady: true});
       this.mapcallbacks.forEach(c => c(map));
       this.mapcallbacks.length = 0;
-      default_markers.forEach(f => new window.google.maps.Marker({
-        position: {lat: f[0], lng: f[1]},
-        map,
-      }));
+      default_markers.forEach(f => {
+        let marker = new window.google.maps.Marker({
+          position: {lat: f[0], lng: f[1]},
+          map,
+        });
+        marker.addListener('click', () => {
+          marker.setMap(null);
+        });
+      });
     };
     this.login(() => {
       this.getMyGeofences();

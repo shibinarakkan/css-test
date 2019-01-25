@@ -28,9 +28,12 @@
   float: left;
   height: 100%;
   padding: 10px;
+  background: #333;
+  box-shadow: 0 0 10px rgba(0,0,0,.3);
+  position: relative;
 }
 .tin {
-  box-shadow: 0 2px 10px rgba(0,0,0,.3);
+  /* box-shadow: 0 2px 10px rgba(0,0,0,.3); */
   border-radius: 4px;
 }
 .ting {
@@ -38,6 +41,19 @@
   margin-bottom: 10px;
   max-height: 283px;
   overflow: auto;
+  border-width: 0 1px 1px 1px;
+  border-color: #2b2b2b;
+  border-style: solid;
+  border-radius: 0 0 5px 5px;
+}
+.ting::-webkit-scrollbar {
+  appearance: none;
+  width: 5px;
+}
+.ting::-webkit-scrollbar-thumb {
+  appearance: none;
+  background: rgba(0,0,0,.3);
+  border-radius: 3px;
 }
 .ting button.sd {
   float: right;
@@ -47,17 +63,25 @@
   margin: 0;
 }
 .ting button {
-  border: 1px solid #ccc;
+  border: 1px solid #555;
   padding: 2px 5px;
   border-radius: 4px;
   margin-bottom: 5px;
   margin-right: 5px;
+  background: #555;
+  color: #ccc;
 }
 .ting button.active {
-  background: #ccc;
+  background: #222;
 }
 .ting button:active {
-  background: #efefef;
+  background: #333;
+}
+.ting input {
+  background: #555;
+  color: #fff;
+  border: none;
+  padding: 2px;
 }
 .tinf {
   background: #f0f0f0;
@@ -66,15 +90,15 @@
   font-weight: bold;
 }
 .grn .tinf {
-  background: #2ecc71;
+  background: #2a7349;
   color: #fff;
 }
 .pur .tinf {
-  background: #9b59b6;
+  background: #5c4067;
   color: #fff;
 }
 .blu .tinf {
-  background: #3498db;
+  background: #264a63;
   color: #fff;
 }
 .ttx {
