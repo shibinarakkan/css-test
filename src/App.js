@@ -4,6 +4,8 @@ import crosshair from './assets/selector-square-border.png';
 import axios from 'axios';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import moment from 'moment';
+import startmarker from './assets/startmarker.png';
+import stopmarker from './assets/stopmarker.png';
 
 const default_markers = [
 ];
@@ -104,7 +106,23 @@ function _drawPolyLine(map, path, bounds) {
     icons,
     map,
   });
-  return polyline;
+  let stm = new window.google.maps.Marker({
+    icon: {
+        url: startmarker,
+        scaledSize: new window.google.maps.Size(38, 38),
+    },
+    map: map,
+    position: _path[0],
+  });
+  let spm = new window.google.maps.Marker({
+    icon: {
+        url: stopmarker,
+        scaledSize: new window.google.maps.Size(38, 38),
+    },
+    map: map,
+    position: _path[_path.length - 1],
+  });
+  return [polyline, stm, spm];
 }
 function _drawMarkers(map, path, bounds) {
   let markers = [];
@@ -157,6 +175,11 @@ function drawZeroPolygon() {
     fillOpacity: 0.35,
   })
   polygon.addListener('click', () => setMessage('Nothing should come in here'));
+}
+
+function clearPolyline(polyline) {
+  if(Array.isArray(polyline)) polyline.forEach(f => f.setMap(null));
+  else polyline.setMap(null);
 }
 
 const url = 'https://apiplatform.intellicar.in';
@@ -570,12 +593,9 @@ class App extends Component {
         <div className="ting">
           {this.state.vehicles.map(v => {
             let onClick = () => {
-              if(this.polyline) {
-                if(Array.isArray(this.polyline)) this.polyline.forEach(f => f.setMap(null));
-                else this.polyline.setMap(null);
-              }
+              if(this.polyline) clearPolyline(this.polyline);
               this.getVehiclePath(v, path => {
-                this.polyline = drawPolyline(this.map, path)
+                if(path.length) this.polyline = drawPolyline(this.map, path);
               });
               this.setState({vehicle:v.vehicleid});
             }
