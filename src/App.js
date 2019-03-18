@@ -126,6 +126,7 @@ class App extends Component {
     window.login = (username, password) => {
       this.login(onLogin, {username, password});
     };
+    this.login(onLogin);
   }
   initRealtime = () => {
     let socket = io.connect(srvURL);
