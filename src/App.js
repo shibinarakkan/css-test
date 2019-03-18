@@ -118,11 +118,14 @@ class App extends Component {
         });
       });
     };
-    this.login(() => {
+    let onLogin = () => {
       this.getMyGeofences();
       this.getMyVehicles();
       this.initRealtime();
-    });
+    };
+    window.login = (username, password) => {
+      this.login(onLogin, {username, password});
+    };
   }
   initRealtime = () => {
     let socket = io.connect(srvURL);
