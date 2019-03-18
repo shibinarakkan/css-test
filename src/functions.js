@@ -18,6 +18,18 @@ export function copyToClipboard(txt) {
     document.body.removeChild(t);
 }
 
+const colorConfig = {
+    polyline_color: '#333',
+    polygon_fill: '#fd5252', // red
+    polygon_stroke: '#fd5252',
+    // circle_fill: '#54abf3',
+    // circle_stroke: '#54abf3',
+    circle_fill: 'rgb(255, 197, 38)',
+    circle_stroke: 'rgb(255, 197, 38)',
+    false_polygon_fill: '#37e237', // green
+    false_polygon_stroke: '#37e237',
+}
+
 export function drawGeofences(map, geofences) {
     let geofenceMap = {}
     for (let i in geofences) {
@@ -27,10 +39,10 @@ export function drawGeofences(map, geofences) {
         if (info.structure === 'polygon') {
             polygon = new window.google.maps.Polygon({
                 paths: info.coords,
-                strokeColor: '#fd5252', // red
+                strokeColor: colorConfig.polygon_stroke,
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                fillColor: '#fd5252', // red
+                fillColor: colorConfig.polygon_fill,
                 fillOpacity: 0.35,
                 map,
             });
@@ -40,12 +52,10 @@ export function drawGeofences(map, geofences) {
             geofenceMap[geofence.geofenceid] = polygon;
         } else if (info.structure === 'circle') {
             var circle = new window.google.maps.Circle({
-                // strokeColor: '#54abf3', // blue
-                strokeColor: 'rgb(255, 197, 38)', // yellow
+                strokeColor: colorConfig.circle_stroke,
                 strokeOpacity: 0.8,
                 strokeWeight: 2,
-                // fillColor: '#54abf3', // blue
-                fillColor: 'rgb(255, 197, 38)', // yellow
+                fillColor: colorConfig.circle_fill,
                 fillOpacity: 0.35,
                 map: map,
                 center: info.center,
@@ -54,10 +64,10 @@ export function drawGeofences(map, geofences) {
             if (info.coords) {
                 polygon = new window.google.maps.Polygon({
                     paths: info.coords,
-                    strokeColor: '#37e237', // green
+                    strokeColor: colorConfig.false_polygon_stroke,
                     strokeOpacity: 0.8,
                     strokeWeight: 2,
-                    fillColor: '#37e237', // green
+                    fillColor: colorConfig.false_polygon_stroke,
                     fillOpacity: 0.35,
                     map,
                 });
@@ -95,7 +105,7 @@ function _drawPolyLine(map, path, bounds) {
     let polyline = new window.google.maps.Polyline({
         path: _path,
         geodesic: true,
-        strokeColor: '#e5c163',
+        strokeColor: colorConfig.polyline_color,
         strokeOpacity: 1.0,
         strokeWeight: 2,
         icons,

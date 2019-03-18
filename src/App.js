@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 import crosshair from './assets/selector-square-border.png';
 import axios from 'axios';
@@ -18,6 +19,11 @@ import {
 import bluedot from './assets/blue-dot.png';
 import greedot from './assets/green-dot.png';
 
+const config = {
+  mapcenter: {lat:12.973506,lng:77.594367},
+  mapzoom: 12,
+}
+
 const default_markers = [
 ];
 
@@ -28,7 +34,7 @@ function callMapCallbacks(callbacks) {
   }
 }
 
-const url = 'https://apiplatform.intellicar.in';
+const srvURL = 'https://apiplatform.intellicar.in';
 
 const geofenceMap = {}
 
@@ -71,17 +77,13 @@ function updateMarker(markerMap, beacon) {
   } else markerMap[vid] = makeMarker(beacon);
 }
 
-window.logout = () => {
-  localStorage.removeItem('token');
-  window.location.reload();
-}
-
 class App extends Component {
   state = {
     mapReady: false,
     vehicles: [],
     geofences: [],
     vehicle: '',
+    loggedIn: false,
   }
   mapcallbacks = []
   markers = {}
@@ -89,16 +91,15 @@ class App extends Component {
     document.addEventListener('visibilitychange', this.visibilityChange);
     loadJS('https://maps.googleapis.com/maps/api/js?key=AIzaSyCTtf_3SOMerJ6WeT4roxHoFSr893OYg2Q&callback=initMap');
     window.initMap = () => {
-      const center = {lat: 17.414832, lng: 78.473736};
       let center_changed = () => {
         let coords = map.getCenter();
         coords = coords.lat().toFixed(6) + ',' + coords.lng().toFixed(6);
         this.refs.coords.value = coords;
       }
       let map = new window.google.maps.Map(document.querySelector('.maph'), {
-          center,
-          zoom: 15,
-          styles: mapstyles,
+          center: config.mapcenter,
+          zoom: config.mapzoom,
+          // styles: mapstyles,
       });
       window.map = map;
       drawZeroPolygon();
@@ -124,7 +125,7 @@ class App extends Component {
     });
   }
   initRealtime = () => {
-    let socket = io.connect(url);
+    let socket = io.connect(srvURL);
     socket.on('connect', () => {
       // console.log('connection')
       // setTimeout(() => {
@@ -143,11 +144,6 @@ class App extends Component {
       // }, 3000);
     });
     this.socket = socket;
-    socket = io.connect('http://192.168.1.124:10106');
-    socket.on('connect', () => {
-      console.log('connected');
-      socket.emit('startsession');
-    })
   }
   onGpsIncoming = payload => {
     for(let i in payload[1]) {
@@ -162,22 +158,20 @@ class App extends Component {
   visibilityChange = () => {
     if(this.mapcallbacks.length) callMapCallbacks(this.mapcallbacks);
   }
-  login = (cb) => {
+  login = (cb, creds) => {
     let token = localStorage.getItem('token');
-    if(!token) axios.post(url + '/gettoken', {
-      user: {
-        username: 'zoom',
-        password: 'zoom123',
-      }
+    if(creds) axios.post(srvURL + '/gettoken', {
+      user: creds
     }).then(rsp => {
       localStorage.setItem('token', rsp.data.data.token);
       cb();
+    }); else if(token) axios.post(srvURL + '/verifytoken', {token}).then(rsp => {
+      cb();
     });
-    else cb();
   }
   getMyVehicles = () => {
     let token = localStorage.getItem('token');
-    axios.post(url + '/api/vehicle/list', {
+    axios.post(srvURL + '/api/vehicle/list', {
       token, groupid: 1, recursive: 1, vehicletype: 'all'
     }).then(rsp => {
       let vehicles = rsp.data.data;
@@ -186,7 +180,7 @@ class App extends Component {
   }
   getMyGeofences = () => {
     let token = localStorage.getItem('token');
-    axios.post(url + '/api/geofence/getmygeofences', {
+    axios.post(srvURL + '/api/geofence/getmygeofences', {
       token, groupid: 1
     }).then(rsp => {
       let geofences = rsp.data.data;
@@ -199,7 +193,7 @@ class App extends Component {
   getVehiclePath = (vehicle, cb) => {
     let token = localStorage.getItem('token');
     let now = moment().startOf('day').hour(8).valueOf();
-    axios.post(url + '/api/reports/rtgps/trackhistory', {
+    axios.post(srvURL + '/api/reports/rtgps/trackhistory', {
       token, vehicleid: vehicle.vehicleid, starttime: now - 86400000, endtime: now
     }).then(rsp => {
       console.log('bad coordinates', vehicle.vehicleno, rsp.data.data.filter(g => g.latitude > -1 && g.latitude < 1 && g.longitude > -1 && g.longitude < 1));
