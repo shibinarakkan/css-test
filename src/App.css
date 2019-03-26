@@ -4,110 +4,66 @@
   font-size: 13px;
 }
 
-.map {
-  width: 70%;
+@keyframes spin {
+  from {transform: rotate(0)}
+  to {transform: rotate(180deg)}
+}
+
+.ld-ring div {
+  width: 20px;
+  height: 20px;
+  border-width: 1px;
+  border-color: #555 transparent #555 transparent;
+  border-style: solid;
+  animation: 1s spin infinite;
+}
+
+.log-ov {
+  display: flex;
   height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.log-bx {
+  padding: 25px;
+  border: 1px solid #ccc;
+  width: 300px;
+}
+.log-ov .grp {
+  margin-bottom: 10px;
+}
+.log-ov input,
+.log-ov button {
+  width: 100%;
+  border: none;
+  background: #ccc;
+  color: #555;
+  padding: 12px;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  font-weight: bold;
+}
+.log-ov input {
+  background: #fff;
+  border: 2px solid #ccc;
+}
+
+.map {
+  height: 100%;
+}
+
+.mapl,
+.mapr {
   float: left;
-  position: relative;
+  height: 100%;
+}
+.mapl {
+  width: 100%
+}
+.mapr {
+  /* width: 50%; */
 }
 .maph {
   height: 100%;
-}
-.mapc {
-  position: absolute;
-  top: calc(50% - 30px);
-  left: calc(50% - 30px);
-  /* top: 50%;
-  left: 50%; */
-  text-align: center;
-  pointer-events: none;
-}
-
-.tools {
-  width: 30%;
-  float: left;
-  height: 100%;
-  padding: 10px;
-  background: #333;
-  box-shadow: 0 0 10px rgba(0,0,0,.3);
-  position: relative;
-}
-.tin {
-  /* box-shadow: 0 2px 10px rgba(0,0,0,.3); */
-  border-radius: 4px;
-}
-.ting {
-  padding: 10px;
-  margin-bottom: 10px;
-  max-height: 283px;
-  overflow: auto;
-  border-width: 0 1px 1px 1px;
-  border-color: #2b2b2b;
-  border-style: solid;
-  border-radius: 0 0 5px 5px;
-}
-.ting::-webkit-scrollbar {
-  appearance: none;
-  width: 5px;
-}
-.ting::-webkit-scrollbar-thumb {
-  appearance: none;
-  background: rgba(0,0,0,.3);
-  border-radius: 3px;
-}
-.ting button.sd {
-  float: right;
-  background: transparent;
-  border: none;
-  color: #ccc;
-  margin: 0;
-}
-.ting button {
-  border: 1px solid #555;
-  padding: 2px 5px;
-  border-radius: 4px;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  background: #555;
-  color: #ccc;
-}
-.ting button.active {
-  background: #222;
-}
-.ting button:active {
-  background: #333;
-}
-.ting input {
-  background: #555;
-  color: #fff;
-  border: none;
-  padding: 2px;
-}
-.tinf {
-  background: #f0f0f0;
-  padding: 10px;
-  border-radius: 4px 4px 0 0;
-  font-weight: bold;
-}
-.grn .tinf {
-  background: #2a7349;
-  color: #fff;
-}
-.pur .tinf {
-  background: #5c4067;
-  color: #fff;
-}
-.blu .tinf {
-  background: #264a63;
-  color: #fff;
-}
-.ttx {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: rgba(0,0,0,.9);
-  padding: 10px;
-  /* font-size: 12px; */
-  color: #fff;
-  border-radius: 4px;
 }

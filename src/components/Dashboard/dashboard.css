@@ -1,0 +1,18 @@
+.db {
+    height: 100%;
+}
+
+.dbs {
+    background: #333;
+    height: 100%;
+    width: 200px;
+    float: left;
+}
+
+.dbc {
+    background: #f00;
+    float: left;
+    width: calc(100% - 200px);
+    height: 100%;
+    padding: 10px;
+}
